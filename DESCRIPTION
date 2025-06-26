@@ -1,4 +1,4 @@
-Package: rvinecopulib
+Package: rvinecopulib_add
 Type: Package
 Title: High Performance Algorithms for Vine Copula Modeling
 Version: 0.7.3.1.0
