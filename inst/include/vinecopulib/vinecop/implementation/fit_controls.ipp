@@ -211,7 +211,9 @@ inline void
 FitControlsVinecop::check_tree_criterion(std::string tree_criterion)
 {
   if (!tools_stl::is_member(tree_criterion,
-                            { "tau", "rho", "joe", "hoeffd", "mcor", "beta" })) {
+                            { "tau", "rho", "joe", "hoeffd", "mcor", "beta",
+                              "ranked_kendall", "ranked_rho", "footrule",
+                              "gini" })) {
     throw std::runtime_error("tree_criterion must be one of "
                              "'tau', 'rho', 'hoeffd', 'mcor', or 'joe', 'beta'");
   }

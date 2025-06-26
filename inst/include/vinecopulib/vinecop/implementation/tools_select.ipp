@@ -18,12 +18,104 @@ namespace vinecopulib {
 
 namespace tools_select {
 
+std::vector<size_t> order(const Eigen::VectorXd& x) {
+    std::vector<size_t> idx(x.size());
+    std::iota(idx.begin(), idx.end(), 0);
+    std::sort(idx.begin(), idx.end(),
+        [&x](size_t i1, size_t i2) {return x[i1] < x[i2];});
+    return idx;
+}
+std::vector<double> rank(const Eigen::VectorXd& x) {
+    size_t n = x.size();
+    std::vector<size_t> idx = order(x);
+    std::vector<double> r(n);
+    for (size_t i = 0; i < n; ++i) r[idx[i]] = i + 1;
+    // 平均秩次（ties）
+    for (size_t i = 0; i < n; ) {
+        size_t j = i + 1;
+        while (j < n && x[idx[j]] == x[idx[i]]) ++j;
+        if (j - i > 1) {
+            double avg = 0.5 * (i + 1 + j);
+            for (size_t k = i; k < j; ++k) r[idx[k]] = avg;
+        }
+        i = j;
+    }
+    return r;
+}
+void induced_order_ranks(const Eigen::VectorXd& x, const Eigen::VectorXd& y,
+                         std::vector<double>& R1, std::vector<double>& R2) {
+    size_t n = x.size();
+    std::vector<size_t> idx = order(x);
+    Eigen::VectorXd y_sorted(n);
+    for (size_t i = 0; i < n; ++i) y_sorted(i) = y(idx[i]);
+    Eigen::VectorXd y1 = y_sorted.head(n-1);
+    Eigen::VectorXd y2 = y_sorted.tail(n-1);
+    R1 = rank(y1);
+    R2 = rank(y2);
+}
+
+// plug-in regression association measure
+double reg_measures_cpp(const Eigen::VectorXd& x, const Eigen::VectorXd& y, const std::string& method) {
+    std::vector<double> R1, R2;
+    induced_order_ranks(x, y, R1, R2);
+    size_t n = R1.size() + 1;
+    std::vector<double> U1(n-1), U2(n-1);
+    for (size_t i = 0; i < n-1; ++i) {
+        U1[i] = R1[i] / n;
+        U2[i] = R2[i] / n;
+    }
+    // empirical copula kernel for Kendall
+    auto Cn_star = [&](double u1, double u2) {
+        size_t count = 0;
+        for (size_t i = 0; i < n-1; ++i)
+            if (U1[i] <= u1 && U2[i] <= u2) ++count;
+        return static_cast<double>(count) / (n-1);
+    };
+
+    if (method == "ranked_kendall") {
+        double sum_c = 0.0;
+        for (size_t i = 0; i < n-1; ++i)
+            sum_c += Cn_star(U1[i], U2[i]);
+        return (4.0 / (n-2)) * sum_c - static_cast<double>(n+2) / (n-2);
+    }
+
+    // plug-in kernels
+    auto kernel = [&](double u, double v) {
+        if (method == "ranked_rho") return u * v;
+        if (method == "footrule") return std::min(u, v);
+        if (method == "gini") return 0.5 * (std::min(u, v) + std::max(u+v-1, 0.0));
+        return u * v;
+    };
+
+    // phi_n
+    double phi_n = 0.0;
+    for (size_t i = 0; i < n-1; ++i) phi_n += kernel(U1[i], U2[i]);
+    phi_n /= (n-1);
+
+    // a_n
+    double a_n = 0.0;
+    for (size_t i = 0; i < n-1; ++i)
+        for (size_t j = 0; j < n-1; ++j)
+            a_n += kernel(U1[i], U1[j]);
+    a_n /= (n-1) * (n-1);
+
+    // b_n
+    double b_n = 0.0;
+    for (size_t i = 0; i < n-1; ++i) b_n += kernel(U1[i], U1[i]);
+    b_n /= (n-1);
+
+    return (phi_n - a_n) / (b_n - a_n);
+}
+
+
 using namespace tools_stl;
 
 //! @brief Calculates criterion for tree selection.
 //! @param data Observations.
 //! @param tree_criterion The criterion.
 //! @param weights Vector of weights for each observation (can be empty).
+
+
 inline double
 calculate_criterion(const Eigen::MatrixXd& data,
                     std::string tree_criterion,
@@ -41,6 +133,14 @@ calculate_criterion(const Eigen::MatrixXd& data,
       // mutual information for Gaussian copula
       w = wdm::wdm(tools_stats::qnorm(data_no_nan), "pearson", weights)(0, 1);
       w = -0.5 * std::log(1 - w * w);
+    } else if (tree_criterion == "ranked_rho" ||
+                 tree_criterion == "ranked_kendall" ||
+                 tree_criterion == "footrule" ||
+                 tree_criterion == "gini") {
+            // 取出 time series pair
+            Eigen::VectorXd x = data_no_nan.col(0);
+            Eigen::VectorXd y = data_no_nan.col(1);
+            w = reg_measures_cpp(x, y, tree_criterion);
     } else {
       w = wdm::wdm(data_no_nan, tree_criterion, weights)(0, 1);
     }

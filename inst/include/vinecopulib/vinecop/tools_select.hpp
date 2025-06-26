@@ -32,6 +32,9 @@ namespace vinecopulib {
 
 namespace tools_select {
 
+double 
+reg_measures_cpp(const Eigen::VectorXd& x, const Eigen::VectorXd& y, const std::string& method);
+
 double
 calculate_criterion(const Eigen::MatrixXd& data,
                     std::string tree_criterion,
