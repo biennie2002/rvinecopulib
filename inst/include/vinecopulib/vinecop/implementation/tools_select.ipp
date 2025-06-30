@@ -72,7 +72,7 @@ double reg_measures_cpp(const Eigen::VectorXd& x, const Eigen::VectorXd& y, cons
         return static_cast<double>(count) / (n-1);
     };
 
-    if (method == "ranked_kendall") {
+    if (method == "ranked_tau") {
         double sum_c = 0.0;
         for (size_t i = 0; i < n-1; ++i)
             sum_c += Cn_star(U1[i], U2[i]);
@@ -134,7 +134,7 @@ calculate_criterion(const Eigen::MatrixXd& data,
       w = wdm::wdm(tools_stats::qnorm(data_no_nan), "pearson", weights)(0, 1);
       w = -0.5 * std::log(1 - w * w);
     } else if (tree_criterion == "ranked_rho" ||
-                 tree_criterion == "ranked_kendall" ||
+                 tree_criterion == "ranked_tau" ||
                  tree_criterion == "footrule" ||
                  tree_criterion == "gini") {
             // 取出 time series pair
