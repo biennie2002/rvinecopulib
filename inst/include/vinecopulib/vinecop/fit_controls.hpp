@@ -69,6 +69,8 @@ public:
 
   std::string get_tree_criterion() const;
 
+  std::string get_tree_criterion_within() const;
+
   double get_threshold() const;
 
   bool get_show_trace() const;
@@ -96,6 +98,8 @@ public:
 
   void set_tree_criterion(std::string tree_criterion);
 
+  void set_tree_criterion_within(std::string tree_criterion_within);
+
   void set_threshold(double threshold);
 
   void set_show_trace(bool show_trace);
@@ -119,6 +123,7 @@ public:
 private:
   size_t trunc_lvl_;
   std::string tree_criterion_;
+  std::string tree_criterion_within_{"tau"};
   double threshold_;
   bool show_trace_;
   bool select_trunc_lvl_;

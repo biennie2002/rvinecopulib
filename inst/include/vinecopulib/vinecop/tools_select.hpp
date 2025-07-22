@@ -40,6 +40,11 @@ calculate_criterion(const Eigen::MatrixXd& data,
                     std::string tree_criterion,
                     Eigen::VectorXd weights);
 
+double
+calculate_criterion_within(const Eigen::MatrixXd& data,
+                    std::string tree_criterion,
+                    Eigen::VectorXd weights);
+
 Eigen::MatrixXd
 calculate_criterion_matrix(const Eigen::MatrixXd& data,
                            const std::string& tree_criterion,

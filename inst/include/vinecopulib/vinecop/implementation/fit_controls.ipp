@@ -21,6 +21,7 @@ inline FitControlsVinecop::FitControlsVinecop()
   trunc_lvl_ = std::numeric_limits<size_t>::max();
   threshold_ = 0.0;
   tree_criterion_ = "tau";
+  tree_criterion_within_ = "tau"; 
   select_trunc_lvl_ = false;
   select_threshold_ = false;
   select_families_ = true;
@@ -110,6 +111,7 @@ inline FitControlsVinecop::FitControlsVinecop(
 {
   set_trunc_lvl(trunc_lvl);
   set_tree_criterion(tree_criterion);
+  set_tree_criterion_within(tree_criterion);
   set_threshold(threshold);
   set_select_trunc_lvl(select_trunc_lvl);
   set_select_threshold(select_threshold);
@@ -162,6 +164,7 @@ inline FitControlsVinecop::FitControlsVinecop(const FitControlsBicop& controls,
 {
   set_trunc_lvl(trunc_lvl);
   set_tree_criterion(tree_criterion);
+  set_tree_criterion_within(tree_criterion);
   set_threshold(threshold);
   set_select_trunc_lvl(select_trunc_lvl);
   set_select_threshold(select_threshold);
@@ -181,6 +184,7 @@ inline FitControlsVinecop::FitControlsVinecop(const FitControlsConfig& config)
   }
   if (optional::has_value(config.tree_criterion)) {
     set_tree_criterion(optional::value(config.tree_criterion));
+    set_tree_criterion_within(optional::value(config.tree_criterion));
   }
   if (optional::has_value(config.threshold)) {
     set_threshold(optional::value(config.threshold));
@@ -287,6 +291,20 @@ FitControlsVinecop::set_tree_criterion(std::string tree_criterion)
   check_tree_criterion(tree_criterion);
   tree_criterion_ = tree_criterion;
 }
+
+inline std::string
+FitControlsVinecop::get_tree_criterion_within() const
+{
+  return tree_criterion_within_;
+}
+
+inline void
+FitControlsVinecop::set_tree_criterion_within(std::string crit)
+{
+  check_tree_criterion(crit);   // 沿用現有合法性檢查
+  tree_criterion_within_ = crit;
+}
+
 
 //! @brief Gets the threshold parameter.
 inline double
@@ -430,6 +448,8 @@ FitControlsVinecop::str() const
                      : std::to_string(get_trunc_lvl()))
                << std::endl;
   controls_str << "Tree criterion: " << get_tree_criterion() << std::endl;
+  controls_str << "Tree criterion (within lag): "
+               << get_tree_criterion_within() << std::endl;
   controls_str << "Threshold: " << get_threshold() << std::endl;
   controls_str << "Select truncation level: "
                << static_cast<std::string>(get_select_trunc_lvl() ? "yes"

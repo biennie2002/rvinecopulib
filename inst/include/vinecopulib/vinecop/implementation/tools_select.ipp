@@ -152,6 +152,48 @@ calculate_criterion(const Eigen::MatrixXd& data,
   return std::fabs(w) * std::sqrt(freq);
 }
 
+//! @brief Calculates criterion for tree selection.
+//! @param data Observations.
+//! @param tree_criterion The criterion.
+//! @param weights Vector of weights for each observation (can be empty).
+
+
+inline double
+calculate_criterion_within(const Eigen::MatrixXd& data,
+                    std::string tree_criterion,
+                    Eigen::VectorXd weights)
+{
+  double w = 0.0;
+  Eigen::MatrixXd data_no_nan = data;
+  tools_eigen::remove_nans(data_no_nan, weights);
+  double freq =
+    static_cast<double>(data_no_nan.rows()) / static_cast<double>(data.rows());
+  if (data_no_nan.rows() > 10) {
+    if (tree_criterion == "mcor") {
+      w = tools_stats::pairwise_mcor(data_no_nan, weights);
+    } else if (tree_criterion == "joe") {
+      // mutual information for Gaussian copula
+      w = wdm::wdm(tools_stats::qnorm(data_no_nan), "pearson", weights)(0, 1);
+      w = -0.5 * std::log(1 - w * w);
+    } else if (tree_criterion == "ranked_rho" ||
+                 tree_criterion == "ranked_tau" ||
+                 tree_criterion == "footrule" ||
+                 tree_criterion == "gini") {
+            // 取出 time series pair
+            Eigen::VectorXd x = data_no_nan.col(0);
+            Eigen::VectorXd y = data_no_nan.col(1);
+            w = reg_measures_cpp(x, y, tree_criterion);
+    } else {
+      w = wdm::wdm(data_no_nan, tree_criterion, weights)(0, 1);
+    }
+
+    if (std::isnan(w)) {
+      w = 0.0;
+    }
+  }
+  return std::fabs(w) * std::sqrt(freq);
+}
+
 //! @brief Evaluates maximal criterion for tree selection.
 //! @param data Observations.
 //! @param tree_criterion The criterion.
