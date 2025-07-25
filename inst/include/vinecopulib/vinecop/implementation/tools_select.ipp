@@ -73,10 +73,25 @@ double reg_measures_cpp(const Eigen::VectorXd& x, const Eigen::VectorXd& y, cons
     };
 
     if (method == "ranked_tau") {
-        double sum_c = 0.0;
-        for (size_t i = 0; i < n-1; ++i)
-            sum_c += Cn_star(U1[i], U2[i]);
-        return (4.0 / (n-2)) * sum_c - static_cast<double>(n+2) / (n-2);
+        // -------- ranked Kendall: 一般公式 (允許 ties) --------
+        double sum_c = 0.0;    // Σ C_n^*(R1_i/n, R2_i/n)
+        double sum_R1 = 0.0;   // Σ R1_i
+        for (size_t i = 0; i < n - 1; ++i) {
+            sum_c  += Cn_star(U1[i], U2[i]);
+            sum_R1 += R1[i];
+        }
+
+        // φ_{n,τ}
+        double phi_n_tau = (sum_c / (n - 2.0)) - 1.0 / (n - 2.0);
+        // p_n
+        double p_n = (sum_R1 / ((n - 1.0) * (n - 2.0))) - 1.0 / (n - 2.0);
+
+        // 避免退化情況 (p_n=0 或 1) 造成除以 0
+        double denom = p_n - p_n * p_n;          // p_n(1 - p_n)
+        if (denom <= 0.0)
+            return std::numeric_limits<double>::quiet_NaN();
+
+        return (phi_n_tau - p_n * p_n) / denom;
     }
 
     // plug-in kernels
