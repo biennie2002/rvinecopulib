@@ -161,7 +161,8 @@ preselect_family(std::vector<double> c, double tau, const Bicop& bicop)
   bool preselect = false;
   if (is_member(family, bicop_families::rotationless)) {
     preselect = true;
-    if ((std::fabs(c[0] - c[1]) > 0.3) & (family == BicopFamily::frank))
+    if ((std::fabs(c[0] - c[1]) > 0.3) &
+        (family == BicopFamily::frank || family == BicopFamily::gluing_frank))
       preselect = false;
   } else {
     if (is_member(family, bicop_families::bb)) {

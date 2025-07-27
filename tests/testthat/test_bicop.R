@@ -95,3 +95,9 @@ test_that("S3 generics work", {
   expect_output(summary(fit))
   expect_output(print(bicop(u, family = "nonp")))
 })
+
+test_that("gluing_frank family works", {
+  cop <- bicop_dist("gluing_frank", 0, 1)
+  val <- dbicop(c(0.5, 0.5), cop)
+  expect_true(is.numeric(val))
+})

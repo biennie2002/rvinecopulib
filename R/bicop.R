@@ -65,7 +65,7 @@
 #'
 #' * `"onepar"` contains the parametric families with a single parameter,
 #'
-#' (`"gaussian"`, `"clayton"`, `"gumbel"`, `"frank"`, and `"joe"`),
+#' (`"gaussian"`, `"clayton"`, `"gumbel"`, `"frank"`, `"gluing_frank"`, and `"joe"`),
 #'
 #' * `"twopar"` contains the parametric families with two parameters,
 #' (`"t"`, `"bb1"`, `"bb6"`, `"bb7"`, and `"bb8"`),
@@ -83,7 +83,7 @@
 #'
 #' * `"itau"` families for which estimation by Kendall's tau inversion is
 #' available (`"indep"`,`"gaussian"`, `"t"`,`"clayton"`, `"gumbel"`,
-#' `"frank"`, `"joe"`).
+#' `"frank"`, `"gluing_frank"`, `"joe"`).
 #'
 #' @return
 #' An object inheriting from classes `bicop` and  `bicop_dist` . In addition to
@@ -238,6 +238,7 @@ as.bicop <- function(object, check = TRUE) {
 #' | Archimedean   | Clayton               | "clayton"     |
 #' | "             | Gumbel                | "gumbel"      |
 #' | "             | Frank                 | "frank"       |
+#' | "             | Gluing Frank          | "gluing_frank" |
 #' | "             | Joe                   | "joe"         |
 #' | "             | Clayton-Gumbel (BB1)  | "bb1"         |
 #' | "             | Joe-Gumbel (BB6)      | "bb6"         |

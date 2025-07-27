@@ -162,6 +162,7 @@ Additionally, nonparametric families are also supported.
 | Archimedean   | Clayton               | "clayton"  |
 | "             | Gumbel                | "gumbel"   |
 | "             | Frank                 | "frank"    |
+| "             | Gluing Frank          | "gluing_frank" |
 | "             | Joe                   | "joe"      |
 | "             | Clayton-Gumbel (BB1)  | "bb1"      |
 | "             | Joe-Gumbel (BB6)      | "bb6"      |
@@ -174,14 +175,14 @@ Note that several convenience vectors of families are included:
 * `"parametric"` contains the parametric families (all except `"tll"`)
 * `"nonparametric"` contains the nonparametric families (`"indep"` and `"tll"`)
 * `"one_par"` contains the parametric families with a single parameter
-(`"gaussian"`, `"clayton"`, `"gumbel"`, `"frank"`, and `"joe"`)
+(`"gaussian"`, `"clayton"`, `"gumbel"`, `"frank"`, `"gluing_frank"`, and `"joe"`)
 * `"two_par"` contains the parametric families with two parameters
 (`"t"`, `"bb1"`, `"bb6"`, `"bb7"`, and `"bb8"`)
 * `"elliptical"` contains the elliptical families
 * `"archimedean"` contains the archimedean families
 * `"BB"` contains the BB families
 * `"itau"` families for which estimation by Kendall's tau inversion is available
-(`"indep"`,`"gaussian"`, `"t"`,`"clayton"`, `"gumbel"`, `"frank"`, `"joe"`)
+(`"indep"`,`"gaussian"`, `"t"`,`"clayton"`, `"gumbel"`, `"frank"`, `"gluing_frank"`, `"joe"`)
 
 The following table shows the parameter ranges of bivariate copula families with 
 one or two parameters:

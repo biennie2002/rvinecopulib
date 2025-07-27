@@ -20,6 +20,7 @@ enum class BicopFamily
   clayton,  ///< Clayton copula
   gumbel,   ///< Gumbel copula
   frank,    ///< Frank copula
+  gluing_frank, ///< Gluing Frank copula
   joe,      ///< Joe copula
   bb1,      ///< BB1 copula
   bb6,      ///< BB6 copula
@@ -42,6 +43,7 @@ namespace bicop_families {
 const std::vector<BicopFamily> all = {
   BicopFamily::indep,   BicopFamily::gaussian, BicopFamily::student,
   BicopFamily::clayton, BicopFamily::gumbel,   BicopFamily::frank,
+  BicopFamily::gluing_frank,
   BicopFamily::joe,     BicopFamily::bb1,      BicopFamily::bb6,
   BicopFamily::bb7,     BicopFamily::bb8,      BicopFamily::tawn, 
   BicopFamily::tll
@@ -51,6 +53,7 @@ const std::vector<BicopFamily> all = {
 const std::vector<BicopFamily> parametric = {
   BicopFamily::indep,   BicopFamily::gaussian, BicopFamily::student,
   BicopFamily::clayton, BicopFamily::gumbel,   BicopFamily::frank,
+  BicopFamily::gluing_frank,
   BicopFamily::joe,     BicopFamily::bb1,      BicopFamily::bb6,
   BicopFamily::bb7,     BicopFamily::bb8,      BicopFamily::tawn
 };
@@ -62,7 +65,7 @@ const std::vector<BicopFamily> nonparametric = { BicopFamily::indep,
 //! All one-parameter families
 const std::vector<BicopFamily> one_par = {
   BicopFamily::gaussian, BicopFamily::clayton, BicopFamily::gumbel,
-  BicopFamily::frank,    BicopFamily::joe,
+  BicopFamily::frank,    BicopFamily::gluing_frank, BicopFamily::joe,
 };
 
 //! All two-parameter families
@@ -84,7 +87,7 @@ const std::vector<BicopFamily> elliptical = { BicopFamily::gaussian,
 //! All Archimedean copulas
 const std::vector<BicopFamily> archimedean = {
   BicopFamily::clayton, BicopFamily::gumbel, BicopFamily::frank,
-  BicopFamily::joe,     BicopFamily::bb1,    BicopFamily::bb6,
+  BicopFamily::gluing_frank, BicopFamily::joe,     BicopFamily::bb1,    BicopFamily::bb6,
   BicopFamily::bb7,     BicopFamily::bb8
 };
 
@@ -106,6 +109,7 @@ const std::vector<BicopFamily> rotationless = { BicopFamily::indep,
                                                 BicopFamily::gaussian,
                                                 BicopFamily::student,
                                                 BicopFamily::frank,
+                                                BicopFamily::gluing_frank,
                                                 BicopFamily::tll };
 
 //! Families with stronger dependence in the lower tail
@@ -124,7 +128,7 @@ const std::vector<BicopFamily> ut = { BicopFamily::gumbel, BicopFamily::joe,
 const std::vector<BicopFamily> itau = {
   BicopFamily::indep,   BicopFamily::gaussian, BicopFamily::student,
   BicopFamily::clayton, BicopFamily::gumbel,   BicopFamily::frank,
-  BicopFamily::joe
+  BicopFamily::gluing_frank, BicopFamily::joe
 };
 
 

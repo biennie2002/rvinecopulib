@@ -47,6 +47,7 @@ parameters, and variable types.
    Archimedean \tab Clayton \tab "clayton" \cr
    " \tab Gumbel \tab "gumbel" \cr
    " \tab Frank \tab "frank" \cr
+   " \tab Gluing Frank \tab "gluing_frank" \cr
    " \tab Joe \tab "joe" \cr
    " \tab Clayton-Gumbel (BB1) \tab "bb1" \cr
    " \tab Joe-Gumbel (BB6) \tab "bb6" \cr

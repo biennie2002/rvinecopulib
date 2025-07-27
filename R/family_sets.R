@@ -2,6 +2,7 @@ family_set_archimedean <- c(
   "clayton",
   "gumbel",
   "frank",
+  "gluing_frank",
   "joe"
 )
 
@@ -56,6 +57,7 @@ family_set_itau <- c(
 
 family_set_rotationless <- c(
   "frank",
+  "gluing_frank",
   family_set_elliptical,
   family_set_nonparametric
 )
